@@ -2,21 +2,8 @@
 <main>
 <?php
 if( have_posts() ):
-	while (have_posts() ):
-		the_post(); ?>
-		<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-		<p>
-			<?php echo get_the_excerpt(); ?>
-			<a href="<?php the_permalink(); ?>">Read more ...</a>
-			<p class="info_meta">
-				<?php the_author(); 
-					echo ' ';
-					the_time('F j, Y'); ?> at <?php the_time('g:i a'); 
-					echo ' Kategori : '; the_category(', ');
-					?>
-			</p>
-		</p>
-		<?php
+	while (have_posts() ): the_post();
+		get_template_part('content', get_post_format());
 	endwhile;
 else:
 	echo 'Tidak ada postingan';
@@ -24,4 +11,27 @@ endif;
 
 ?>
 </main>
+
+<!--Memanggil Widget-->
+<aside>
+    <?php dynamic_sidebar('sidebar1') ?>
+</aside>
+<div class="clear"></div>
 <?php get_footer(); ?>
+
+<!--WP Query-->
+<div id="custom_post">
+    <h1>Post Terakhir : </h1>
+<?php
+    $custom_post = new WP_Query('cat=7');
+
+    if   ($custom_post -> have_posts()):
+        while ($custom_post->have_posts()): $custom_post->the_post(); ?>
+        <a href="<?php the_permalink(); ?>"> <?php the_title(); ?></a>
+    <?php
+    endwhile;
+    else:
+        echo 'Tidak ada postingan';
+    endif;
+?>
+</div>
